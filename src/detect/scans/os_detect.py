@@ -5,7 +5,7 @@ from detect.core.scan_result import ScanResult
 
 
 class OSDetectScan(Scan):
-    NAME = 'Port Scan'
+    NAME = 'OS Detect Scan'
 
     def run(self, host='127.0.0.1', start_port=22, end_port=443):
         nm = nmap.PortScanner()
