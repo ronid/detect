@@ -1,3 +1,8 @@
-./idea*
-*pycache*
-src/detect.egg-info/*
+
+\.idea/
+
+src/detect\.egg-info/
+
+src/detect/__pycache__/
+
+*.pyc
