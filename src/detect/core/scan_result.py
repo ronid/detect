@@ -2,12 +2,11 @@ import pyprinter
 
 
 class ScanResult(object):
-    def __init__(self, name, took, **kwargs):
+    def __init__(self, name, took=None, conclusions=(), columns=None):
         self.name = name
         self.took = took
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-        self.parameters = kwargs.keys()
+        self.conclusions = conclusions
+        self.columns = columns
 
     def __repr__(self):
         return '<{} Result>'.format(self.name)
@@ -20,5 +19,10 @@ class ScanResult(object):
         printer.write_line('=' * len(title))
         printer.write_line(printer.WHITE + 'Scan took {} seconds.'.format(self.took))
         with printer.group(3):
-            for key in self.parameters:
-                printer.write_aligned(key, getattr(self, key), align_size=10)
+            if self.columns:
+                # Scan result should be printed as table
+                table = pyprinter.Table('', self.conclusions, self.columns)
+                table.pretty_print(printer)
+                return
+            for conclusion in self.conclusions:
+                conclusion.pretty_print()
