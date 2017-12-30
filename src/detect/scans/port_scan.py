@@ -27,9 +27,20 @@ class PortScanResult(object):
 
 
 class PortScan(Scan):
+    """
+    Scan for open ports on target between start port and end port.
+    """
     NAME = 'Port Scan'
 
-    def run(self, host='127.0.0.1', start_port=441, end_port=443):
+    def run(self, target='127.0.0.1', start_port=441, end_port=443):
+        """
+        Runs port scan against given host.
+
+        :param target: IP or name of target.
+        :param start_port: The first port in ports range.
+        :param end_port: The last port in ports range.
+        :return: ScanResult object with list of ports and their status.
+        """
         start_port = start_port if isinstance(start_port, int) else int(start_port)
         end_port = end_port if isinstance(end_port, int) else int(end_port)
 
@@ -39,7 +50,7 @@ class PortScan(Scan):
             self.logger.info('Trying to establish UDP/TCP connection on port {}'.format(port))
             for protocol in _PROTOCOLS.keys():
                 sock = socket.socket(socket.AF_INET, protocol)
-                result = sock.connect_ex((host, port))
+                result = sock.connect_ex((target, port))
                 if result == 0:
                     self.logger.info('Port {} is {} open'.format(port, _PROTOCOLS.get(protocol)))
                 conclusions.append(PortScanResult(port_number=port,
