@@ -1,8 +1,14 @@
 import datetime as dt
 import socket
 
+import pyprinter
 from detect.core.base_scan import Scan
 from detect.core.scan_result import ScanResult
+
+_PROTOCOLS = {
+    socket.SOCK_STREAM: 'TCP',
+    socket.SOCK_DGRAM: 'UDP'
+}
 
 
 class PortScanResult(object):
@@ -11,11 +17,13 @@ class PortScanResult(object):
         self.protocol = protocol
         self.is_open = is_open
 
-
-PROTOCOLS = {
-    socket.SOCK_STREAM: 'TCP',
-    socket.SOCK_DGRAM: 'UDP'
-}
+    def pretty_print(self, printer=None):
+        printer = printer or pyprinter.get_printer()
+        line = '{port} {protocol} {status_color}{is_open}'.format(port=self.port_number,
+                                                                  protocol=self.protocol,
+                                                                  status_color=printer.GREEN if self.is_open else printer.RED,
+                                                                  is_open=self.is_open)
+        printer.write_line(line)
 
 
 class PortScan(Scan):
@@ -29,16 +37,15 @@ class PortScan(Scan):
         start = dt.datetime.now()
         for port in range(start_port, end_port):
             self.logger.info('Trying to establish UDP/TCP connection on port {}'.format(port))
-            for protocol in PROTOCOLS.keys():
+            for protocol in _PROTOCOLS.keys():
                 sock = socket.socket(socket.AF_INET, protocol)
                 result = sock.connect_ex((host, port))
                 if result == 0:
-                    self.logger.info('Port {} is {} open'.format(port, PROTOCOLS.get(protocol)))
+                    self.logger.info('Port {} is {} open'.format(port, _PROTOCOLS.get(protocol)))
                 conclusions.append(PortScanResult(port_number=port,
-                                                  protocol=PROTOCOLS.get(protocol),
+                                                  protocol=_PROTOCOLS.get(protocol),
                                                   is_open=True if result == 0 else False))
                 sock.close()
 
         end = dt.datetime.now()
-        return ScanResult(self.NAME, end - start, conclusions=conclusions,
-                          columns=['port_number', 'protocol', 'is_open'])
+        return ScanResult(self.NAME, end - start, conclusions=conclusions)
