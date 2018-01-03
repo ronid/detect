@@ -19,10 +19,8 @@ class PortScanResult(object):
 
     def pretty_print(self, printer=None):
         printer = printer or pyprinter.get_printer()
-        line = '{port} {protocol} {status_color}{is_open}'.format(port=self.port_number,
-                                                                  protocol=self.protocol,
-                                                                  status_color=printer.GREEN if self.is_open else printer.RED,
-                                                                  is_open=self.is_open)
+        status_color = printer.GREEN if self.is_open else printer.RED
+        line = f'{self.port_number} {self.protocol} {status_color}{self.is_open}{printer.NORMAL}'
         printer.write_line(line)
 
 
