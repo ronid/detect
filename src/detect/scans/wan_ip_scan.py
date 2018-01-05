@@ -28,10 +28,10 @@ class WANIPScan(Scan):
         Sends ICMP requests to a given subent.
         The function first tries to find the gateway MAC address, by extracting the default gateway IP on the local machine and then
         sending arp request to this IP address. The code extracts the gateway MAC address from the arp response,
-        generates ICMP requests (PING) to each one of the addresses in the given subnet and then extracts the IP from the ICMP response (PING reply).
+        generates ICMP requests (PING) to each one of the addresses in the given subnet and then extracts the IP addresses from the ICMP responses (PING replies).
         The reason the code sends the requests with the gateway MAC address is because we need the requests to be sent to entities outside of the LAN.
         :param subnet: ip range to scan
-        :return: Scan result that contains all the existing IP addresses outside the local network
+        :return: Scan result that contains all the existing IP addresses outside the LAN
         """
         start = dt.datetime.now()
         results = []
