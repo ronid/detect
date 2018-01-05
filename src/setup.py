@@ -21,7 +21,7 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
     packages=find_packages(),
-    install_requires=['pyprinter'],
+    install_requires=['pyprinter', 'scapy-python3', 'netifaces'],
     entry_points={
         'console_scripts': [
             'detect=detect.run:main',
