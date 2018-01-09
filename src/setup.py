@@ -21,10 +21,11 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
     packages=find_packages(),
-    install_requires=['pyprinter', 'scapy-python3', 'netifaces'],
+    install_requires=['pyprinter', 'scapy-python3', 'netifaces', 'logbook'],
     entry_points={
         'console_scripts': [
-            'detect=detect.run:main',
+            'scan-network=detect.run:scan_network',
+            'scan-host=detect.run:scan_host',
         ],
     },
 )

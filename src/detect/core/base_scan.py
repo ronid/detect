@@ -1,13 +1,19 @@
 import logbook
+import inspect
 
 
 class ScanMeta(type):
-    SCANS = dict()
+    NETWORK_SCANS = dict()
+    HOST_SCANS = dict()
 
     def __new__(cls, name, bases, attrs):
         new_class = super(ScanMeta, cls).__new__(cls, name, bases, attrs)
         if name != 'Scan':
-            cls.SCANS[name] = new_class
+            signature = inspect.signature(new_class.run)
+            if 'target' in signature.parameters:
+                cls.HOST_SCANS[name] = new_class
+            else:
+                cls.NETWORK_SCANS[name] = new_class
         return new_class
 
 
