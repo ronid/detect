@@ -1,6 +1,6 @@
 import datetime as dt
 import pyprinter
-from scapy.all import srp,ARP,Ether
+from scapy.all import srp, ARP, Ether
 
 from detect.core.base_scan import Scan
 from detect.core.scan_result import ScanResult
@@ -23,7 +23,7 @@ class LANIPScan(Scan):
     NAME = 'LAN IP Scan'
     TIMEOUT = 1
 
-    def run(self, interface='en0', subnet='192.168.1.0/24'):
+    def run(self, interface='Intel(R) Dual Band Wireless-AC 8265', subnet='192.168.1.0/24'):
         """
         Sends arp queries to a given subnet by using Scapy's send-receive function.
         The function sets the MAC destination in the scapy packet to be broadcast in order to get answers from
@@ -33,9 +33,13 @@ class LANIPScan(Scan):
         :param subnet: ip range to scan
         :return: Scan result that contains all the MAC & IP addresses in the local network
         """
+        interface = interface or [interface['name'] for interface
+                                  in scapy.arch.windows.get_windows_if_list() if 'wireless' in interface['name']]
+
         start = dt.datetime.now()
         results = []
-        responses, no_responses = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=subnet), iface=interface, timeout=self.TIMEOUT, verbose=0)
+        responses, no_responses = srp(Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=subnet), iface=interface,
+                                      timeout=self.TIMEOUT, verbose=0)
         for request, reply in responses:
             results.append(LANIPScanResult(reply.hwsrc, reply.psrc))
 

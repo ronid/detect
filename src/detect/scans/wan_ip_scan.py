@@ -1,6 +1,7 @@
 import datetime as dt
 import pyprinter
-from scapy.all import Ether,IP,ICMP,srp,ARP
+import scapy
+from scapy.all import Ether, IP, ICMP, srp, ARP
 import netifaces
 
 from detect.core.base_scan import Scan
@@ -36,16 +37,20 @@ class WANIPScan(Scan):
         start = dt.datetime.now()
         results = []
         gateways = netifaces.gateways()
-        gateway_ip, ifc = gateways['default'][netifaces.AF_INET]
-
-        responses, no_responses = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=gateway_ip), iface=ifc, timeout=self.TIMEOUT, verbose=0)
+        gateway_ip, ifc_guid = gateways['default'][netifaces.AF_INET]
+        ifc = [interface['name'] for interface in
+               scapy.arch.windows.get_windows_if_list()
+               if interface['guid'] == ifc_guid][0]
+        responses, no_responses = srp(Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=gateway_ip), iface=ifc,
+                                      timeout=self.TIMEOUT, verbose=0)
         if len(responses) != 1:
             return
 
         arp_request, arp_reply = responses[0]
         gateway_mac = arp_reply.hwsrc
 
-        responses, no_responses = srp(Ether(dst=gateway_mac)/IP(dst=subnet)/ICMP(), iface=ifc, timeout=self.TIMEOUT, verbose=0)
+        responses, no_responses = srp(Ether(dst=gateway_mac) / IP(dst=subnet) / ICMP(), iface=ifc,
+                                      timeout=self.TIMEOUT, verbose=0)
         for request, reply in responses:
             results.append(WANIPScanResult(reply[IP].src))
 
