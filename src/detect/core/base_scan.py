@@ -1,5 +1,6 @@
 import logbook
 import inspect
+import datetime as dt
 
 
 class ScanMeta(type):
@@ -22,6 +23,12 @@ class Scan(object, metaclass=ScanMeta):
 
     def __init__(self):
         self.logger = logbook.Logger(self.NAME)
+
+    def _run(self, *args, **kwargs):
+        start = dt.datetime.now()
+        scan_result = self.run(*args, **kwargs)
+        scan_result.took = dt.datetime.now() - start
+        return scan_result
 
     def run(self, *args, **kwargs):
         raise NotImplementedError()

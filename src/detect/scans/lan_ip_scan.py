@@ -1,9 +1,7 @@
-import datetime as dt
 import pyprinter
-from scapy.all import srp, ARP, Ether
-
 from detect.core.base_scan import Scan
 from detect.core.scan_result import ScanResult
+from scapy.all import srp, ARP, Ether
 
 
 class LANIPScanResult(object):
@@ -36,11 +34,10 @@ class LANIPScan(Scan):
         interface = interface or [interface['name'] for interface
                                   in scapy.arch.windows.get_windows_if_list() if 'wireless' in interface['name']]
 
-        start = dt.datetime.now()
         results = []
         responses, no_responses = srp(Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=subnet), iface=interface,
                                       timeout=self.TIMEOUT, verbose=0)
         for request, reply in responses:
             results.append(LANIPScanResult(reply.hwsrc, reply.psrc))
 
-        return ScanResult(self.NAME, dt.datetime.now() - start, results)
+        return ScanResult(self.NAME, results)

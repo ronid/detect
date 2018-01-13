@@ -1,11 +1,9 @@
-import datetime as dt
+import netifaces
 import pyprinter
 import scapy
-from scapy.all import Ether, IP, ICMP, srp, ARP
-import netifaces
-
 from detect.core.base_scan import Scan
 from detect.core.scan_result import ScanResult
+from scapy.all import Ether, IP, ICMP, srp, ARP
 
 
 class WANIPScanResult(object):
@@ -34,7 +32,6 @@ class WANIPScan(Scan):
         :param subnet: ip range to scan
         :return: Scan result that contains all the existing IP addresses outside the LAN
         """
-        start = dt.datetime.now()
         results = []
         gateways = netifaces.gateways()
         gateway_ip, ifc_guid = gateways['default'][netifaces.AF_INET]
@@ -54,4 +51,4 @@ class WANIPScan(Scan):
         for request, reply in responses:
             results.append(WANIPScanResult(reply[IP].src))
 
-        return ScanResult(self.NAME, dt.datetime.now() - start, results)
+        return ScanResult(self.NAME, results)
