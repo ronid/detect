@@ -22,7 +22,7 @@ class OSDetectScan(Scan):
     """
     NAME = 'OS Detect Scan'
 
-    def run(self, target='127.0.0.1'):
+    def run(self, target='192.168.2.138'):
         """
         Performs nmap os detect against target given.
         Nmap sends a series of TCP and UDP packets to the remote host and examines practically every bit in the
