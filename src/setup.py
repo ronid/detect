@@ -28,6 +28,7 @@ setup(
             'scan-wan-network=detect.run:scan_wan_network',
             'scan=detect.run:scan',
             'scan-host=detect.run:scan_host',
+            'scan-help=detect.run:print_help'
         ],
     },
 )

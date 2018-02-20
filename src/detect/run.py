@@ -1,7 +1,10 @@
-import logbook
-from detect.scans import *
-from detect.core.base_scan import ScanMeta
+import inspect
 import sys
+
+import logbook
+import pyprinter
+from detect.core.base_scan import ScanMeta
+from detect.scans import *
 
 
 def scan_network():
@@ -36,3 +39,25 @@ def scan_host():
         for scan_cls in ScanMeta.HOST_SCANS.values():
             result = scan_cls()._run(target=host, **kwargs)
             result.pretty_print()
+
+
+def print_help():
+    printer = pyprinter.get_printer(width_limit=3000)
+    printer.write_title('Subnet scans', title_color=printer.RED)
+    for scan_name, scan_cls in ScanMeta.NETWORK_SCANS.items():
+        _print_scan(printer, scan_name, scan_cls)
+    printer.write_title('Host scans', title_color=printer.RED)
+    for scan_name, scan_cls in ScanMeta.HOST_SCANS.items():
+        _print_scan(printer, scan_name, scan_cls)
+
+
+def _print_scan(printer, scan_name, scan_cls):
+    printer.write_line(printer.CYAN + scan_name)
+    printer.write_line(scan_cls.run.__doc__)
+    printer.write_line(printer.WHITE + 'Default values: ')
+    for param, value in inspect.signature(scan_cls.run).parameters.items():
+        if param in ('self, kwargs'):
+            continue
+        printer.write_aligned(key=param, value=value.default, key_color=printer.GREEN, align_size=10)
+    printer.write_line()
+    printer.write_line()
