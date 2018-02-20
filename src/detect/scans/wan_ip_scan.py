@@ -49,6 +49,7 @@ class WANIPScan(Scan):
         responses, no_responses = srp(Ether(dst=gateway_mac) / IP(dst=subnet) / ICMP(), iface=ifc,
                                       timeout=self.TIMEOUT, verbose=0)
         for request, reply in responses:
-            results.append(WANIPScanResult(reply[IP].src))
+            if reply.payload.payload.fields['type'] == 0 and reply.payload.payload.fields['code'] == 0:
+                results.append(WANIPScanResult(reply[IP].src))
 
         return ScanResult(self.NAME, results)
