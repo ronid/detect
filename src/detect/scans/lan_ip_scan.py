@@ -32,7 +32,7 @@ class LANIPScan(Scan):
         :return: Scan result that contains all the MAC & IP addresses in the local network
         """
         interface = interface or [interface['name'] for interface
-                                  in scapy.arch.windows.get_windows_if_list() if 'wireless' in interface['name']]
+                                  in scapy.arch.windows.get_windows_if_list() if 'vmnet2' in interface['name'].lower()]
 
         results = []
         responses, no_responses = srp(Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=subnet), iface=interface,
