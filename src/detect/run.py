@@ -16,6 +16,15 @@ def scan_wan_network():
     result.pretty_print()
 
 
+def scan():
+    subnet = sys.argv[1]
+    log_handler = logbook.StderrHandler()
+    with log_handler.applicationbound():
+        for scan_cls in ScanMeta.NETWORK_SCANS.values():
+            result = scan_cls()._run(subnet=subnet)
+            result.pretty_print()
+
+
 def scan_host():
     host = sys.argv[1]
     log_handler = logbook.StderrHandler()
@@ -23,5 +32,3 @@ def scan_host():
         for scan_cls in ScanMeta.HOST_SCANS.values():
             result = scan_cls()._run(target=host)
             result.pretty_print()
-
-
