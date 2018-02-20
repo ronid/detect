@@ -27,8 +27,12 @@ def scan():
 
 def scan_host():
     host = sys.argv[1]
+    kwargs = dict()
+    for arg in sys.argv[2:]:
+        key, value = arg.split('=')
+        kwargs[key.strip()] = value
     log_handler = logbook.StderrHandler()
     with log_handler.applicationbound():
         for scan_cls in ScanMeta.HOST_SCANS.values():
-            result = scan_cls()._run(target=host)
+            result = scan_cls()._run(target=host, **kwargs)
             result.pretty_print()

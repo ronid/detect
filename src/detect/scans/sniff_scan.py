@@ -24,7 +24,7 @@ class SniffScan(Scan):
     """
     NAME = 'Sniff Scan'
 
-    def run(self, target='127.0.0.1'):
+    def run(self, target='127.0.0.1', **kwargs):
         """
         Runs port scan against given host.
 
