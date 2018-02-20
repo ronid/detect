@@ -21,7 +21,8 @@ class LANIPScan(Scan):
     NAME = 'LAN IP Scan'
     TIMEOUT = 1
 
-    def run(self, interface='vmnet2', subnet='192.168.2.0/24'):
+
+    def run(self, interface='vmnet2', subnet='192.168.2.0/24',**kwargs):
         """
         Sends arp queries to a given subnet by using Scapy's send-receive function.
         The function sets the MAC destination in the scapy packet to be broadcast in order to get answers from
