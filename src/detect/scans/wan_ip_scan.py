@@ -22,7 +22,7 @@ class WANIPScan(Scan):
     NAME = 'WAN IP Scan'
     TIMEOUT = 1
 
-    def run(self, subnet='8.8.8.8/32'):
+    def run(self, subnet='8.8.8.8/32', **kwargs):
         """
         Sends ICMP requests to a given subent.
         The function first tries to find the gateway MAC address, by extracting the default gateway IP on the local machine and then

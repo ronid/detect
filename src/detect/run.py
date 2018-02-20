@@ -22,9 +22,13 @@ def scan_wan_network():
 def scan():
     subnet = sys.argv[1]
     log_handler = logbook.StderrHandler()
+    kwargs = dict()
+    for arg in sys.argv[2:]:
+        key, value = arg.split('=')
+        kwargs[key.strip()] = value
     with log_handler.applicationbound():
         for scan_cls in ScanMeta.NETWORK_SCANS.values():
-            result = scan_cls()._run(subnet=subnet)
+            result = scan_cls()._run(subnet=subnet, **kwargs)
             result.pretty_print()
 
 

@@ -42,7 +42,7 @@ class PortScan(Scan):
             start_port, end_port = port_ranges.split('-')
             start_port = start_port if isinstance(start_port, int) else int(start_port)
             end_port = end_port if isinstance(end_port, int) else int(end_port)
-            for port in range(start_port, end_port):
+            for port in range(start_port, end_port + 1):
                 self.logger.info('Trying to establish UDP/TCP connection on port {}'.format(port))
                 for protocol in _PROTOCOLS.keys():
                     sock = socket.socket(socket.AF_INET, protocol)
