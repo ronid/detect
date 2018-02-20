@@ -2,10 +2,10 @@ import pyprinter
 
 
 class ScanResult(object):
-    def __init__(self, name, took=None, conclusions=()):
+    def __init__(self, name, conclusions=()):
         self.name = name
-        self.took = took
         self.conclusions = conclusions
+        self.took = None
 
     def __repr__(self):
         return '<{} Result>'.format(self.name)

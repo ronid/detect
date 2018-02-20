@@ -1,5 +1,4 @@
 import nmap
-import datetime as dt
 import pyprinter
 
 from detect.core.base_scan import Scan
@@ -14,7 +13,7 @@ class OSDetectScanResult(object):
 
     def pretty_print(self, printer=None):
         printer = printer or pyprinter.get_printer()
-        printer.write_line(f'{printer.WHITE}{self.os} {printer.CYAN}({self.vendor}) {printer.GREEN}{self.accuracy}%')
+        printer.write_line(f'{printer.WHITE}{self.os} {printer.CYAN}({self.vendor}) {printer.GREEN}{self.accuracy}%{printer.NORMAL}')
 
 
 class OSDetectScan(Scan):
@@ -23,7 +22,7 @@ class OSDetectScan(Scan):
     """
     NAME = 'OS Detect Scan'
 
-    def run(self, target='127.0.0.1'):
+    def run(self, target='192.168.2.138'):
         """
         Performs nmap os detect against target given.
         Nmap sends a series of TCP and UDP packets to the remote host and examines practically every bit in the
@@ -35,7 +34,6 @@ class OSDetectScan(Scan):
         :return: Scan result that contains a list of all possible os match.
         """
         nm = nmap.PortScanner()
-        start = dt.datetime.now()
         self.logger.info('performing nmap os detection')
         nm.scan(target, arguments='-O')
         results = []
@@ -44,4 +42,4 @@ class OSDetectScan(Scan):
             results.append(OSDetectScanResult(os=match['name'],
                                               vendor=match['osclass'][0]['vendor'],
                                               accuracy=match['accuracy']))
-        return ScanResult(self.NAME, dt.datetime.now() - start, results)
+        return ScanResult(self.NAME, results)

@@ -1,4 +1,3 @@
-import datetime as dt
 import socket
 
 import pyprinter
@@ -43,7 +42,6 @@ class PortScan(Scan):
         end_port = end_port if isinstance(end_port, int) else int(end_port)
 
         conclusions = []
-        start = dt.datetime.now()
         for port in range(start_port, end_port):
             self.logger.info('Trying to establish UDP/TCP connection on port {}'.format(port))
             for protocol in _PROTOCOLS.keys():
@@ -56,5 +54,4 @@ class PortScan(Scan):
                                                   is_open=True if result == 0 else False))
                 sock.close()
 
-        end = dt.datetime.now()
-        return ScanResult(self.NAME, end - start, conclusions=conclusions)
+        return ScanResult(self.NAME, conclusions=conclusions)
