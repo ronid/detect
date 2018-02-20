@@ -6,13 +6,13 @@ import sys
 
 def scan_network():
     subnet = sys.argv[1]
-    result = LANIPScan().run(subnet=subnet)
+    result = LANIPScan()._run(subnet=subnet)
     result.pretty_print()
 
 
 def scan_wan_network():
     subnet = sys.argv[1]
-    result = WANIPScan().run(subnet=subnet)
+    result = WANIPScan()._run(subnet=subnet)
     result.pretty_print()
 
 
