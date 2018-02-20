@@ -6,7 +6,6 @@ from detect.core.scan_result import ScanResult
 
 _PROTOCOLS = {
     socket.SOCK_STREAM: 'TCP',
-    socket.SOCK_DGRAM: 'UDP'
 }
 
 
