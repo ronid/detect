@@ -25,6 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'scan-network=detect.run:scan_network',
+            'scan-wan-network=detect.run:scan_wan_network',
             'scan-host=detect.run:scan_host',
         ],
     },

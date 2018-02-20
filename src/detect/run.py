@@ -5,9 +5,15 @@ import sys
 
 
 def scan_network():
-    for scan_cls in ScanMeta.NETWORK_SCANS.values():
-        result = scan_cls()._run()
-        result.pretty_print()
+    subnet = sys.argv[1]
+    result = LANIPScan().run(subnet=subnet)
+    result.pretty_print()
+
+
+def scan_wan_network():
+    subnet = sys.argv[1]
+    result = WANIPScan().run(subnet=subnet)
+    result.pretty_print()
 
 
 def scan_host():
@@ -17,3 +23,5 @@ def scan_host():
         for scan_cls in ScanMeta.HOST_SCANS.values():
             result = scan_cls()._run(target=host)
             result.pretty_print()
+
+
