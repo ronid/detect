@@ -32,8 +32,6 @@ class SniffScan(Scan):
         :return: ScanResult object with an boolean that say if the target is sniffing or not
         """
         conclusions = []
-        start = dt.datetime.now()
         ans, uans = srp(Ether(dst='ff:ff:ff:ff:ff:fe')/ARP(pdst=target),timeout=2)
         conclusions.append(SnifferScanResult(target, is_sniff=False if ans.res == [] else True))
-        end = dt.datetime.now()
-        return ScanResult(self.NAME, end - start, conclusions=conclusions)
+        return ScanResult(self.NAME, conclusions=conclusions)
